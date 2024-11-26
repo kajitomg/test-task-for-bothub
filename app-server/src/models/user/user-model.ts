@@ -20,7 +20,7 @@ export interface UserModel extends Model<InferAttributes<UserModel>, InferCreati
   updated_at: number,
   
   getAuthToken: HasOneGetAssociationMixin<AuthTokenModel>,
-  addAuthToken: HasOneCreateAssociationMixin<AuthTokenModel>,
+  setAuthToken: HasOneCreateAssociationMixin<AuthTokenModel>,
   
   associations?: Association<UserModel, AuthTokenModel>;
 }

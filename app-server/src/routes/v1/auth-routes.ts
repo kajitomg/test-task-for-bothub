@@ -1,9 +1,10 @@
 import {Router} from 'express'
+import { authController } from '../../controllers';
 
 const router = Router()
 
-router.post('/signin')
-router.post('/signup')
-router.get('/refresh')
+router.post('/signin', authController.signin)
+router.post('/signup', authController.signup)
+router.get('/refresh', authController.refreshAuth)
 
 export { router as auth_routes }

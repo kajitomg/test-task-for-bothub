@@ -4,7 +4,7 @@ import { authTokenModel } from './auth-token-model';
 
 roleModel.hasMany(userModel, { as: 'users', foreignKey: 'role_id' })
 
-userModel.hasOne(authTokenModel, { foreignKey: 'user_id' })
+userModel.hasOne(authTokenModel, { as: 'AuthToken', foreignKey: 'user_id' })
 
 export default {
   userModel,
