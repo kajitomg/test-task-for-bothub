@@ -7,4 +7,4 @@ router.post('/signin', authController.signin)
 router.post('/signup', authController.signup)
 router.get('/refresh', authController.refreshAuth)
 
-export { router as auth_routes }
+export { router as authRoutes }

@@ -20,7 +20,7 @@ export default {
     })
     
     if (!authToken) {
-      throw new Error('Ошибка при создании сущности auth-token-model')
+      throw new Error('Ошибка при создании сущности auth-token-ai')
     }
     
     return authToken
