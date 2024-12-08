@@ -26,6 +26,13 @@ class ApiError extends Error {
   }
   
   /**
+   * Требуется оплата.
+   */
+  static PaymentRequiredError(message?: string, errors: string[] = []) {
+    return new ApiError(402, message || 'Требуется оплата',errors)
+  }
+  
+  /**
    * Доступ запрещен.
    */
   static ForbiddenError(message?: string, errors: string[] = []) {

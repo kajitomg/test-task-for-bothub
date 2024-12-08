@@ -1,12 +1,8 @@
-import {Router} from 'express'
+import {Router} from 'express';
+import { messageController } from '../../controllers';
 
 const router = Router()
 
-router.post('/send')
-router.get('/:id')
-router.put('/:id')
-router.delete('/:id')
-router.get('/list')
-router.get('/messages')
+router.post('/send', messageController.send)
 
 export { router as messageRoutes }

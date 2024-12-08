@@ -4,6 +4,7 @@ import { roleModel } from './role-model';
 import { authTokenModel } from './auth-token-model';
 
 roleModel.hasMany(userModel, { as: 'Users', foreignKey: 'role_id' })
+userModel.belongsTo(roleModel, { as: 'Role', foreignKey: 'role_id' })
 
 userModel.hasOne(authTokenModel, { as: 'AuthToken', foreignKey: 'user_id' })
 
@@ -13,4 +14,5 @@ export default {
   userModel,
   roleModel,
   authTokenModel,
+  walletModel
 }

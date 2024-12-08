@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import db from '../db';
+import { UserDTO } from '../dto/user-dto';
 import userService, { UserAuthData } from '../services/user-service';
 
 const controller = {
@@ -10,15 +11,22 @@ const controller = {
         password,
         username
       } = req.body as UserAuthData;
-      
-      const reqData = await db.transaction(async (t) => {
+
+      const {
+        item,
+        ...otherData
+      } = await db.transaction(async (t) => {
         return await userService.signin({
           password,
           username
         });
       })
       
-      res.status(200).send(reqData)
+      
+      res.status(200).send({
+        item: new UserDTO(item),
+        ...otherData
+      })
     } catch (e) {
       next(e);
     }
@@ -31,14 +39,20 @@ const controller = {
         username
       } = req.body as UserAuthData;
       
-      const reqData = await db.transaction(async (t) => {
+      const {
+        item,
+        ...otherData
+      } = await db.transaction(async (t) => {
         return await userService.signup({
           password,
           username
         });
       })
     
-      res.status(200).send(reqData)
+      res.status(200).send({
+        item: new UserDTO(item),
+        ...otherData
+      })
     } catch (e) {
       next(e);
     }
@@ -48,11 +62,17 @@ const controller = {
     try {
       const { refreshToken } = req?.cookies
       
-      const reqData = await db.transaction(async (t) => {
+      const {
+        item,
+        ...otherData
+      } = await db.transaction(async (t) => {
         return await userService.refreshAuth(refreshToken);
       })
       
-      res.status(200).send(reqData)
+      res.status(200).send({
+        item: new UserDTO(item),
+        ...otherData
+      })
     } catch (e) {
       next(e);
     }

@@ -11,13 +11,10 @@ const PORT = process.env.PORT || 3000
 
 const app = express()
 
-app.use(cors({
-  credentials: true,
-}))
+app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser())
-
-//app.use(authMiddleware)
 
 app.use('/api', router)
 
@@ -28,4 +25,5 @@ app.listen(PORT, async () => {
   models
   await openConnection();
 })
+
 
