@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { UserDTO } from '../dto/user-dto';
 import { ApiError } from '../exceptions/api-error-exception';
 import { User } from '../models/user/user-model';
 import chatService from '../services/chat-service';
@@ -75,6 +76,25 @@ const controller = {
       next(e);
     }
   },
+  
+  async authorizingChatAccess(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { chat_id } = req.body as { chat_id: number }
+      
+      //@ts-ignore
+      const userData = req.user as UserDTO
+      if (!userData) throw ApiError.UnauthorizedError()
+      
+      const chats = await chatService.getAllChatsByUserId(userData.id)
+      
+      const isAccess = chats.some((chat) => chat.id === Number(chat_id))
+      if (!isAccess) throw ApiError.ForbiddenError()
+      
+      next()
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export { controller as messageController }

@@ -138,6 +138,20 @@ export default {
     return jobs
   },
   
+  async getJobsByUserId(id: number, options?: { scope?: Partial<'isPending'> }) {
+    const jobs = await jobModel.scope(options?.scope).findAll({
+      where: {
+        user_id: id
+      }
+    })
+    
+    if (!jobs) {
+      throw ApiError.InternalServerError('Ошибка при поиске запросов')
+    }
+    
+    return jobs
+  },
+  
   async updateJobById(id: JobPersonalData['id'], data: Pick<JobMainData, 'status'>) {
     const currentTime = Date.now();
     const job = await this.getJobById(id)

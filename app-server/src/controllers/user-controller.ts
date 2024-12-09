@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import db from '../db';
+import { UserDTO } from '../dto/user-dto';
+import { ApiError } from '../exceptions/api-error-exception';
 import { User } from '../models/user/user-model';
+import chatService from '../services/chat-service';
 import userService from '../services/user-service';
 
 const controller = {
@@ -63,7 +66,7 @@ const controller = {
     } catch (e) {
       next(e);
     }
-  },
+  }
 }
 
 export { controller as userController }

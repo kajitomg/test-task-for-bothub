@@ -59,7 +59,7 @@ router.post('/', chatController.create)
  *       '200':
  *         description: OK
  */
-router.get('/:id')
+router.get('/:id', chatController.authorizingChatAccess)
 /**
  * @openapi
  * /chat/{id}:
@@ -76,7 +76,7 @@ router.get('/:id')
  *       '200':
  *         description: OK
  */
-router.put('/:id')
+router.put('/:id', chatController.authorizingChatAccess)
 /**
  * @openapi
  * /chat/{id}:
@@ -93,7 +93,7 @@ router.put('/:id')
  *       '200':
  *         description: OK
  */
-router.delete('/:id')
+router.delete('/:id', chatController.authorizingChatAccess)
 /**
  * @openapi
  * /chat/list:
@@ -123,7 +123,7 @@ router.get('/list')
  *       '200':
  *         description: OK
  */
-router.get('/:id/messages')
+router.get('/:id/messages', chatController.authorizingChatAccess)
 /**
  * @openapi
  * /chat/{id}/stream:
@@ -156,7 +156,7 @@ router.get('/:id/messages')
  *                   type: object
  *                   example: {}
  */
-router.get('/:id/stream',  sseMiddleware, chatController.stream)
+router.get('/:id/stream', chatController.authorizingChatAccess,  sseMiddleware, chatController.stream)
 /**
  * @openapi
  * /chat/{id}/stop:
@@ -173,6 +173,6 @@ router.get('/:id/stream',  sseMiddleware, chatController.stream)
  *       '200':
  *         description: OK
  */
-router.post('/:id/stop', chatController.stop)
+router.post('/:id/stop', chatController.authorizingChatAccess, chatController.stop)
 
 export { router as chatRoutes }

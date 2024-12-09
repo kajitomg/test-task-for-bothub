@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import OpenAI from 'openai';
 import db from '../db';
 import { UserDTO } from '../dto/user-dto';
+import { ApiError } from '../exceptions/api-error-exception';
 import sendSSE from '../helpers/send-sse';
 import { Job } from '../models/job/job-model';
 import { Message } from '../models/message/message-model';
@@ -170,6 +171,25 @@ const controller = {
       })
       
       res.sendStatus(200)
+    } catch (e) {
+      next(e);
+    }
+  },
+  
+  async authorizingChatAccess(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params
+      
+      //@ts-ignore
+      const userData = req.user as UserDTO
+      if (!userData) throw ApiError.UnauthorizedError()
+
+      const chats = await chatService.getAllChatsByUserId(userData.id)
+
+      const isAccess = chats.some((chat) => chat.id === Number(id))
+      if (!isAccess) throw ApiError.ForbiddenError()
+      
+      next()
     } catch (e) {
       next(e);
     }

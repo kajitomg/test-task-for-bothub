@@ -64,9 +64,11 @@ export default {
     return chat
   },
   
-  async getAllChatsByUser(id: ChatRefData['user_id']) {
+  async getAllChatsByUserId(id: ChatRefData['user_id']) {
     return await chatModel.findAll({
-      where: {id}
+      where: {
+        user_id: id
+      }
     })
   },
   

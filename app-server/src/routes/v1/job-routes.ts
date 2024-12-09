@@ -14,7 +14,7 @@ const router = Router()
  *       '200':
  *         description: OK
  */
-router.get('/:id')
+router.get('/:id', jobController.authorizingJobAccess)
 /**
  * @openapi
  * /job/{id}/stop:
@@ -38,6 +38,6 @@ router.get('/:id')
  *                 item:
  *                   $ref: '#/components/schemas/Job'
  */
-router.post('/:id/stop', jobController.stop)
+router.post('/:id/stop', jobController.authorizingJobAccess, jobController.stop)
 
 export { router as jobRoutes }

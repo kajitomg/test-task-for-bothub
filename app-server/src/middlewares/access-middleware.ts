@@ -1,5 +1,4 @@
 import { RequestHandler } from 'express';
-import { UserDTO } from '../dto/user-dto';
 import { ApiError } from '../exceptions/api-error-exception';
 import { Permissions } from '../models/user/role-model';
 import { User } from '../models/user/user-model';
