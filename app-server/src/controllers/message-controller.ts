@@ -43,7 +43,7 @@ const controller = {
       let message = await messageService.createAssistantMessage({
         chat_id
       })
-      res.status(200).send(message)
+      res.status(200).send({ item: message })
 
       const result = await jobService.startModelGenerationJob(job.id, {
         message_id: message.id,

@@ -20,7 +20,7 @@ const controller = {
         });
       })
       
-      res.status(200).send(model)
+      res.status(200).send({ item: model })
     } catch (e) {
       next(e);
     }

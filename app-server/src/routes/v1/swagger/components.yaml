@@ -1,0 +1,271 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          format: int256
+          example: User
+        password:
+          type: string
+          format: int64
+          example: password123
+        role_id:
+          type: integer
+          format: int64
+          example: 1
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          format: int256
+          example: user
+        permissions:
+          type: array
+          items:
+            type: string
+            enum:
+            - ALL
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+
+    Wallet:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        currency:
+          type: string
+          enum:
+            - credit
+        balance:
+          type: number
+          format: int64
+          example: 10000
+        initial:
+          type: boolean
+          example: true
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        currency:
+          type: string
+          enum:
+            - credit
+        amount:
+          type: number
+          format: int64
+          example: 100
+        status:
+          type: string
+          enum:
+            - SUCCESS
+            - FAILED
+        type:
+          type: string
+          enum:
+            - ENHANCE
+            - WRITE_OFF
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        wallet_id:
+          type: integer
+          format: int64
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        content:
+          type: string
+          format: int256
+          example: message text
+          nullable: true
+        chat_id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+          nullable: true
+        role:
+          type: string
+          enum:
+            - user
+            - assistant
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+
+    Job:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          enum:
+            - MODEL_GENERATION
+        status:
+          type: string
+          enum:
+            - CREATE
+            - PENDING
+            - DONE
+            - STOPPED
+        chat_id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        message_id:
+          type: integer
+          format: int64
+          example: 1
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+
+    Chat:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          format: int256
+          example: chat
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        model_id:
+          type: integer
+          format: int64
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+
+    Model:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          format: int256
+          example: gpt-3.5-turbo
+        in_rate:
+          type: number
+          format: float
+          example: 0.15
+        out_rate:
+          type: number
+          format: float
+          example: 0.2
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-12-08 20:37:12.112+00
+        created_by:
+          type: integer
+          format: int64
+          example: 1
+
+  securitySchemes:
+    refreshToken:
+      type: string
+      name: refreshToken
+      in: cookie

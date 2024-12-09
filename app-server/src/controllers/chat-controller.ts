@@ -55,7 +55,7 @@ const controller = {
         });
       })
       
-      res.status(200).send(chat)
+      res.status(200).send({ item: chat })
     } catch (e) {
       next(e);
     }
