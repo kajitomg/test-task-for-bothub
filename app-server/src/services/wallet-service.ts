@@ -40,7 +40,7 @@ export default {
     return wallet
   },
   
-  async updateWalletById(id: WalletPersonalData['id'], data: Partial<WalletMainData>, options?: { scope?: Partial<'initial'> }) {
+  async updateWalletById(id: WalletPersonalData['id'], data: Partial<WalletMainData> & { chat_id?: number }, options?: { scope?: Partial<'initial'> }) {
     const currentTime = Date.now();
     const affected = await walletModel.scope(options?.scope).update({
       ...data,
@@ -54,7 +54,9 @@ export default {
     }
     const wallet = await this.getWalletById(id)
     
-    streams.get(wallet.user_id)?.emit('WALLET_UPDATE', wallet)
+    if (data.chat_id) {
+      streams.get(data.chat_id)?.emit('WALLET_UPDATE', wallet)
+    }
     
     return wallet
   },
@@ -69,11 +71,12 @@ export default {
     return wallet
   },
   
-  async transaction(id: WalletPersonalData['id'], data: { amount: number }) {
+  async transaction(id: WalletPersonalData['id'], data: { amount: number, chat_id?: number }) {
     let wallet = await this.getWalletById(id)
     
     wallet = await this.updateWalletById(id, {
-      balance: wallet.balance + data.amount
+      balance: wallet.balance + data.amount,
+      chat_id: data.chat_id
     })
     
     return wallet

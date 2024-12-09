@@ -1,7 +1,5 @@
 import { ApiError } from '../exceptions/api-error-exception';
 import { Chat, chatModel } from '../models/chat/chat-model';
-import { JobNames } from '../models/job/job-model';
-import jobService from './job-service';
 
 type ChatPersonalData = Pick<Chat, 'id'>
 type ChatTimestampsData = Pick<Chat, 'created_at' | 'updated_at'>

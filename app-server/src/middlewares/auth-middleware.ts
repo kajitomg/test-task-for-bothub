@@ -21,7 +21,7 @@ const authMiddleware: RequestHandler = async (req, res, next) => {
     req.user = new UserDTO(user)
     next()
   } catch (e) {
-    throw ApiError.UnauthorizedError()
+    next(e);
   }
 }
 

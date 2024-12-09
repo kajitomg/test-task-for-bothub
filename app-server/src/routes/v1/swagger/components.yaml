@@ -11,23 +11,11 @@ components:
           type: string
           format: int256
           example: User
-        password:
-          type: string
-          format: int64
-          example: password123
         role_id:
           type: integer
           format: int64
           example: 1
           nullable: true
-        created_at:
-          type: string
-          format: date-time
-          example: 2024-12-08 20:37:12.112+00
-        updated_at:
-          type: string
-          format: date-time
-          example: 2024-12-08 20:37:12.112+00
 
     Role:
       type: object

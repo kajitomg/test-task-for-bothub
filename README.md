@@ -33,7 +33,7 @@ npm run dev
 
 Для инициализации базовых сущностей необходимо в консоль ввести команду:
 ***
-npx sequelize-cli db:seed:all
+npx sequelize-cli db:seed:all --env development
 ***
 
 ### Использование
@@ -52,8 +52,8 @@ PGADMIN_PASSWORD=password
 
 Данные для создания сервера
 
-![img_1.png](img_1.png)
-
+![img_1.png](static/img.png)
+ 
 DB_USERNAME=user
 
 DB_PASSWORD=password

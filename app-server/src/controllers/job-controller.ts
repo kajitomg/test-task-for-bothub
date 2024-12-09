@@ -12,7 +12,7 @@ const controller = {
       const job = await db.transaction(async (t) => {
         const job = await jobService.getJobById(Number(id));
         
-        await streams.get(job.user_id)?.emit('JOB_ABORT', job);
+        await streams.get(job.chat_id)?.emit('JOB_ABORT', job);
         
         return job
       })

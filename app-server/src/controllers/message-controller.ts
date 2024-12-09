@@ -23,7 +23,7 @@ const controller = {
       const user = await userService.getUserById(userData.id)
       
       if (!user) throw ApiError.UnauthorizedError()
-      
+
       await messageService.createUserMessage({
         content: prompt,
         chat_id,

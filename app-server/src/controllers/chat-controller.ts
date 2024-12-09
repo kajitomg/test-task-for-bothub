@@ -63,17 +63,14 @@ const controller = {
   
   async stream(req: Request, res: Response, next: NextFunction) {
     try {
-      //const { id } = req.params
+      const { id } = req.params
       
-      //@ts-ignore
-      const user = req.user as User
-      
-      let stream = streams.get(Number(user.id))
+      let stream = streams.get(Number(id))
       if (stream) {
         stream.emit('MULTIPLE_CONNECTIONS')
       }
       stream = new EventEmitter<Events>();
-      streams.set(Number(user.id), stream);
+      streams.set(Number(id), stream);
       
       stream.on('MULTIPLE_CONNECTIONS', () => {
         res.end()
@@ -151,11 +148,11 @@ const controller = {
       
       req.on('close', () => {
         console.info('SSE connection closed');
-        streams.delete(Number(user.id));
+        streams.delete(Number(id));
       });
       res.on('error', () => {
         console.info('SSE connection error')
-        streams.delete(Number(user.id));
+        streams.delete(Number(id));
         res.end();
       });
     } catch (e) {
@@ -169,7 +166,7 @@ const controller = {
       const jobs = await jobService.getJobsByChatId(Number(id), {scope:'isPending'});
       
       jobs.map(async (job) => {
-        streams.get(Number(job.user_id))?.emit('JOB_ABORT', job)
+        streams.get(Number(job.chat_id))?.emit('JOB_ABORT', job)
       })
       
       res.sendStatus(200)

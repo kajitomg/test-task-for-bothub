@@ -14,7 +14,7 @@ type TransactionSecureData = Pick<Transaction, 'status'>
 type TransactionMainData = Omit<Transaction, keyof TransactionPersonalData | keyof TransactionTimestampsData | keyof TransactionRefData | keyof TransactionSecureData>
 
 export default {
-  async createTransaction(data: TransactionRefData & Partial<TransactionMainData> & Pick<TransactionMainData, 'amount' | 'type'>) {
+  async createTransaction(data: TransactionRefData & Partial<TransactionMainData> & Pick<TransactionMainData, 'amount' | 'type'> & { chat_id?: number}) {
     const currentTime = Date.now()
     
     await db.transaction(async () => {
@@ -29,10 +29,13 @@ export default {
         if (!transaction) {
           throw ApiError.InternalServerError('Ошибка при создании транзакции');
         }
-        streams.get(transaction.user_id)?.emit('TRANSACTION_CREATE', transaction)
+        if (data.chat_id) {
+          streams.get(data.chat_id)?.emit('TRANSACTION_CREATE', transaction)
+        }
         
         await walletService.transaction(data.wallet_id, {
-          amount: data.type === 'WRITE_OFF' ? -data.amount : data.amount
+          amount: data.type === 'WRITE_OFF' ? -data.amount : data.amount,
+          chat_id: data.chat_id
         })
         
         return transaction
@@ -44,28 +47,26 @@ export default {
           created_at: currentTime,
           updated_at: currentTime,
         })
-        streams.get(transaction.user_id)?.emit('TRANSACTION_CREATE', transaction)
+        if (data.chat_id) {
+          streams.get(data.chat_id)?.emit('TRANSACTION_CREATE', transaction)
+        }
         return e
       }
     })
   },
   
-  async createWriteOffTransaction(data: TransactionRefData & Partial<Omit<TransactionMainData, 'type'>> & Pick<TransactionMainData, 'amount'> & { chat_id: number }) {
-    const transaction = await this.createTransaction({
+  async createWriteOffTransaction(data: TransactionRefData & Partial<Omit<TransactionMainData, 'type'>> & Pick<TransactionMainData, 'amount'> & { chat_id?: number }) {
+    return await this.createTransaction({
       type: 'WRITE_OFF',
       ...data
     })
-    
-    return transaction
   },
   
-  async createEnhanceTransaction(data: TransactionRefData & Partial<Omit<TransactionMainData, 'type'>> & Pick<TransactionMainData, 'amount'> & { chat_id: number }) {
-    const transaction = await this.createTransaction({
+  async createEnhanceTransaction(data: TransactionRefData & Partial<Omit<TransactionMainData, 'type'>> & Pick<TransactionMainData, 'amount'> & { chat_id?: number }) {
+    return await this.createTransaction({
       type: 'ENHANCE',
       ...data
     })
-    
-    return transaction
   },
   
   async getTotalCaps(data: {model_id: number, in: number, out: number}) {

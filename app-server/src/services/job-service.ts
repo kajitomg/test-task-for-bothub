@@ -30,7 +30,9 @@ export default {
     if (!job) {
       throw ApiError.InternalServerError('Ошибка при создании запроса')
     }
-    streams.get(data.user_id)?.emit('JOB_CREATE', job)
+    if (data.chat_id) {
+      streams.get(data.chat_id)?.emit('JOB_CREATE', job)
+    }
     
     return job
   },
@@ -56,21 +58,21 @@ export default {
     let job = await this.updateJobById(id, {
       status: 'PENDING'
     })
-    streams.get(job.user_id)?.emit('JOB_START', job)
+    streams.get(job.chat_id)?.emit('JOB_START', job)
     
     const messages = await messageService.getAllMessagesByChatId(job.user_id, {scope: 'openaiMessage'})
     
     let message = await messageService.getMessageById(data.message_id, {scope: 'withJob'})
     
     await message.setJob(job)
-    streams.get(job.user_id)?.emit('MESSAGE_UPDATE', message)
+    streams.get(job.chat_id)?.emit('MESSAGE_UPDATE', message)
     const stream = await openai.chat.completions.create({
       model: model.name,
       messages: messages as OpenAI.Chat.Completions.ChatCompletionMessageParam[],
       stream: true,
     });
     
-    streams.get(job.user_id)?.on('JOB_ABORT', job_abort)
+    streams.get(job.chat_id)?.on('JOB_ABORT', job_abort)
     function job_abort(streamed_job: Job) {
       if (streamed_job.id === job.id) {
         stream.controller.abort()
@@ -97,13 +99,13 @@ export default {
     }
     if (stream.controller.signal.aborted && !finish) {
       job = await this.updateJobById(job.id, {status: 'STOPPED'});
-      streams.get(job.user_id)?.emit('JOB_STOP', job)
+      streams.get(job.chat_id)?.emit('JOB_STOP', job)
     }
     job = await this.updateJobById(id, {
       status: 'DONE'
     })
-    streams.get(job.user_id)?.emit('JOB_DONE', job)
-    streams.get(job.user_id)?.off('JOB_ABORT', job_abort)
+    streams.get(job.chat_id)?.emit('JOB_DONE', job)
+    streams.get(job.chat_id)?.off('JOB_ABORT', job_abort)
     
     return {
       tokens,
@@ -145,7 +147,7 @@ export default {
       updated_at: currentTime
     })
     
-    streams.get(job.user_id)?.emit('JOB_UPDATE', job)
+    streams.get(job.chat_id)?.emit('JOB_UPDATE', job)
     
     if (!job) {
       throw ApiError.InternalServerError('Ошибка при обновлении запроса')

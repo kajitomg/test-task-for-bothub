@@ -12,7 +12,6 @@ type MessageMainData = Omit<Message, keyof MessagePersonalData | keyof MessageTi
 export default {
   async createMessage(data: Partial<MessageMainData> & Partial<MessageRefData> & Pick<MessageRefData, 'chat_id'>) {
     const currentTime = Date.now();
-    const chat = await chatService.getChatById(data.chat_id)
 
     const message = await messageModel.create({
       ...data,
@@ -23,25 +22,24 @@ export default {
     if (!message) {
       throw ApiError.InternalServerError('Ошибка при создании сообщения')
     }
-    streams.get(chat.user_id)?.emit('MESSAGE_CREATE', message)
+    
+    if (data.chat_id) {
+      streams.get(data.chat_id)?.emit('MESSAGE_CREATE', message)
+    }
     
     return message
   },
   async createUserMessage(data: Partial<Omit<MessageMainData, 'role'>> & MessageRefData) {
-    const message = await this.createMessage({
+    return await this.createMessage({
       role: 'user',
       ...data,
     })
-    
-    return message
   },
   async createAssistantMessage(data: Partial<Omit<MessageMainData, 'role'>> & Pick<MessageRefData, 'chat_id'>) {
-    const message = await this.createMessage({
+    return await this.createMessage({
       role: 'assistant',
       ...data,
     })
-    
-    return message
   },
   async getMessageById(id: MessagePersonalData['id'], options?: { scope?: Partial<'withJob' | 'light'> }) {
     const message = await messageModel.scope(options?.scope).findByPk(id)
@@ -61,8 +59,9 @@ export default {
       updated_at: currentTime
     })
     
-    const chat = await chatService.getChatById(message.chat_id)
-    streams.get(chat.user_id)?.emit('MESSAGE_UPDATE', message)
+    if (message.chat_id) {
+      streams.get(message.chat_id)?.emit('MESSAGE_UPDATE', message)
+    }
     
     if (!message) {
       throw ApiError.InternalServerError('Ошибка при обновлении сообщения')

@@ -13,7 +13,7 @@ module.exports = {
     return await queryInterface.bulkInsert('wallets', [
       {
         currency: 'credit',
-        balance: 0,
+        balance: 100000,
         user_id: admin?.id,
         initial: true,
         created_at: currentTime,
