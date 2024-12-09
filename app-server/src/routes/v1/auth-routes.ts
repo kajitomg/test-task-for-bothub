@@ -42,11 +42,11 @@ const router = Router()
  *                 accessToken:
  *                   type: string
  *                   format: int64
- *                   example: 'd1690a07-3780-4068-810f-9b5bbf2931b2:deviceid:1724331617186-7911323144381093275:8BJhqLq5AQU:1724332055675'
+ *                   example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGVfaWQiOjQsImlhdCI6MTczMzc1NzEwMywiZXhwIjoxNzM2MzQ5MTAzfQ.ER_YgFxEh8DaSt_EDvgI7FB9jGP_4pQ9jz3dbEsM9Io'
  *                 refreshToken:
  *                   type: string
  *                   format: int64
- *                   example: 'd1690a07-3780-4068-810f-9b5bbf2931b2:deviceid:1724331617186-7911323144381093275:8BJhqLq5AQU:1724332055675'
+ *                   example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGVfaWQiOjQsImlhdCI6MTczMzc1NzEwMywiZXhwIjoxNzM2MzQ5MTAzfQ.ER_YgFxEh8DaSt_EDvgI7FB9jGP_4pQ9jz3dbEsM9Io'
  */
 router.post('/signin', authController.signin)
 /**
@@ -88,11 +88,11 @@ router.post('/signin', authController.signin)
  *                 accessToken:
  *                   type: string
  *                   format: int64
- *                   example: 'd1690a07-3780-4068-810f-9b5bbf2931b2:deviceid:1724331617186-7911323144381093275:8BJhqLq5AQU:1724332055675'
+ *                   example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGVfaWQiOjQsImlhdCI6MTczMzc1NzEwMywiZXhwIjoxNzM2MzQ5MTAzfQ.ER_YgFxEh8DaSt_EDvgI7FB9jGP_4pQ9jz3dbEsM9Io'
  *                 refreshToken:
  *                   type: string
  *                   format: int64
- *                   example: 'd1690a07-3780-4068-810f-9b5bbf2931b2:deviceid:1724331617186-7911323144381093275:8BJhqLq5AQU:1724332055675'
+ *                   example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGVfaWQiOjQsImlhdCI6MTczMzc1NzEwMywiZXhwIjoxNzM2MzQ5MTAzfQ.ER_YgFxEh8DaSt_EDvgI7FB9jGP_4pQ9jz3dbEsM9Io'
  */
 router.post('/signup', authController.signup)
 /**
@@ -118,11 +118,11 @@ router.post('/signup', authController.signup)
  *                 accessToken:
  *                   type: string
  *                   format: int64
- *                   example: 'd1690a07-3780-4068-810f-9b5bbf2931b2:deviceid:1724331617186-7911323144381093275:8BJhqLq5AQU:1724332055675'
+ *                   example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGVfaWQiOjQsImlhdCI6MTczMzc1NzEwMywiZXhwIjoxNzM2MzQ5MTAzfQ.ER_YgFxEh8DaSt_EDvgI7FB9jGP_4pQ9jz3dbEsM9Io'
  *                 refreshToken:
  *                   type: string
  *                   format: int64
- *                   example: 'd1690a07-3780-4068-810f-9b5bbf2931b2:deviceid:1724331617186-7911323144381093275:8BJhqLq5AQU:1724332055675'
+ *                   example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGVfaWQiOjQsImlhdCI6MTczMzc1NzEwMywiZXhwIjoxNzM2MzQ5MTAzfQ.ER_YgFxEh8DaSt_EDvgI7FB9jGP_4pQ9jz3dbEsM9Io'
  */
 router.get('/refresh', authController.refreshAuth)
 
