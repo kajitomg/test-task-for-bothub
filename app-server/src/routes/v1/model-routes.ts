@@ -37,7 +37,7 @@ const router = Router()
  *                 item:
  *                   $ref: '#/components/schemas/Model'
  */
-router.post('/',accessMiddleware('admin'), modelController.create)
+router.post('/',accessMiddleware('admin'), modelController.createModel)
 /**
  * @openapi
  * /model/list:
@@ -49,7 +49,13 @@ router.post('/',accessMiddleware('admin'), modelController.create)
  *     responses:
  *       '200':
  *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               list:
+ *                 $ref: '#/components/schemas/Model'
  */
-router.get('/list')
+router.get('/list', modelController.getAllModels)
 
 export { router as modelRoutes }

@@ -5,7 +5,7 @@ import aiService, { AiMainData } from '../services/ai-service';
 
 const controller = {
   
-  async create(req: Request, res: Response, next: NextFunction) {
+  async createModel(req: Request, res: Response, next: NextFunction) {
     try {
       const {
         name,
@@ -21,6 +21,19 @@ const controller = {
       })
       
       res.status(200).send({ item: model })
+    } catch (e) {
+      next(e);
+    }
+  },
+  
+  async getAllModels(req: Request, res: Response, next: NextFunction) {
+    try {
+      
+      const models = await db.transaction(async (t) => {
+        return await aiService.getAllAis();
+      })
+      
+      res.status(200).send({ list: models })
     } catch (e) {
       next(e);
     }

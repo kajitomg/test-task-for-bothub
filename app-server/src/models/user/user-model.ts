@@ -1,5 +1,4 @@
 import {
-  Association,
   CreationOptional,
   DataTypes, HasManyGetAssociationsMixin, HasOneCreateAssociationMixin,
   HasOneGetAssociationMixin,
@@ -9,10 +8,9 @@ import {
 } from 'sequelize';
 
 import db from '../../db';
-import { MessageModel } from '../message/message-model';
 import { AuthTokenModel } from './auth-token-model';
 import { RoleModel } from './role-model';
-import { Wallet, WalletModel } from './wallet-model';
+import { WalletModel } from './wallet-model';
 
 type UserAssociations = {
   getAuthToken: HasOneGetAssociationMixin<AuthTokenModel>,

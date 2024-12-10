@@ -1,13 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import db from '../db';
-import { UserDTO } from '../dto/user-dto';
-import { ApiError } from '../exceptions/api-error-exception';
 import { User } from '../models/user/user-model';
-import chatService from '../services/chat-service';
 import userService from '../services/user-service';
 
 const controller = {
-  async getBalance(req: Request, res: Response, next: NextFunction) {
+  async getBalanceById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       
@@ -34,7 +31,7 @@ const controller = {
       next(e);
     }
   },
-  async setBalance(req: Request, res: Response, next: NextFunction) {
+  async setBalanceById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const { balance } = req.body as { balance: number };
@@ -51,12 +48,12 @@ const controller = {
     }
   },
   
-  async setRole(req: Request, res: Response, next: NextFunction) {
+  async setRoleByRoleId(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const { role_id } = req.body as { role_id: number };
       
-      const role = await db.transaction(async (t) => {
+      const role = await db.transaction(async () => {
         return await userService.setRole(Number(id), {
           role_id
         });

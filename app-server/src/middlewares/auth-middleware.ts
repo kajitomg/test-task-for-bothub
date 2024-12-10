@@ -16,7 +16,6 @@ const authMiddleware: RequestHandler = async (req, res, next) => {
     
     const user = await userService.getUserById(userData.id)
     if (!user) throw ApiError.UnauthorizedError()
-    
     //@ts-ignore
     req.user = new UserDTO(user)
     next()

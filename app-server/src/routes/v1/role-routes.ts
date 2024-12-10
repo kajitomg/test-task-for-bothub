@@ -42,6 +42,6 @@ const router = Router()
  *                 item:
  *                   $ref: '#/components/schemas/Role'
  */
-router.post('/',accessMiddleware('admin'), roleController.create)
+router.post('/',accessMiddleware('admin'), roleController.createRole)
 
 export { router as roleRoutes }

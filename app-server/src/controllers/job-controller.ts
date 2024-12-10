@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import db from '../db';
 import { UserDTO } from '../dto/user-dto';
 import { ApiError } from '../exceptions/api-error-exception';
-import chatService from '../services/chat-service';
 import jobService from '../services/job-service';
 import { streams } from './chat-controller';
 
@@ -12,7 +11,7 @@ const controller = {
     try {
       const { id } = req.params
       
-      const job = await db.transaction(async (t) => {
+      const job = await db.transaction(async () => {
         const job = await jobService.getJobById(Number(id));
         
         await streams.get(job.chat_id)?.emit('JOB_ABORT', job);
@@ -26,7 +25,21 @@ const controller = {
     }
   },
   
-  async authorizingJobAccess(req: Request, res: Response, next: NextFunction) {
+  async getJobById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params
+      
+      const job = await db.transaction(async () => {
+        return await jobService.getJobById(Number(id));
+      })
+      
+      res.status(200).send({ item: job })
+    } catch (e) {
+      next(e);
+    }
+  },
+  
+  async authorizingAccess(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params
       

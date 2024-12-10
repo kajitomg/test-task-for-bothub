@@ -40,6 +40,6 @@ const router = Router()
  *                 item:
  *                   $ref: '#/components/schemas/Message'
  */
-router.post('/send', messageController.authorizingChatAccess, messageController.send)
+router.post('/send', messageController.authorizingAccess, messageController.sendMessageInChat)
 
 export { router as messageRoutes }

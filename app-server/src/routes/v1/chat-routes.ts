@@ -42,7 +42,7 @@ const router = Router()
  *                 item:
  *                   $ref: '#/components/schemas/Chat'
  */
-router.post('/', chatController.create)
+router.post('/', chatController.createChat)
 /**
  * @openapi
  * /chat/{id}:
@@ -58,8 +58,15 @@ router.post('/', chatController.create)
  *     responses:
  *       '200':
  *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 item:
+ *                   $ref: '#/components/schemas/Chat'
  */
-router.get('/:id', chatController.authorizingChatAccess)
+router.get('/:id(\\\\d+)', chatController.authorizingAccess, chatController.getChatById)
 /**
  * @openapi
  * /chat/{id}:
@@ -72,11 +79,29 @@ router.get('/:id', chatController.authorizingChatAccess)
  *       required: true
  *     summary: Обновление чата
  *     description: Обновление чата по id
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 format: int256
+ *                 example: chat
+ *       required: true
  *     responses:
  *       '200':
  *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 item:
+ *                   $ref: '#/components/schemas/Chat'
  */
-router.put('/:id', chatController.authorizingChatAccess)
+router.put('/:id', chatController.authorizingAccess, chatController.updateChatById)
 /**
  * @openapi
  * /chat/{id}:
@@ -93,7 +118,7 @@ router.put('/:id', chatController.authorizingChatAccess)
  *       '200':
  *         description: OK
  */
-router.delete('/:id', chatController.authorizingChatAccess)
+router.delete('/:id', chatController.authorizingAccess, chatController.deleteChatById)
 /**
  * @openapi
  * /chat/list:
@@ -105,8 +130,14 @@ router.delete('/:id', chatController.authorizingChatAccess)
  *     responses:
  *       '200':
  *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Chat'
  */
-router.get('/list')
+router.get('/list', chatController.listMyChats)
 /**
  * @openapi
  * /chat/{id}/messages:
@@ -122,8 +153,14 @@ router.get('/list')
  *     responses:
  *       '200':
  *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Message'
  */
-router.get('/:id/messages', chatController.authorizingChatAccess)
+router.get('/:id/messages', chatController.authorizingAccess, chatController.messagesById)
 /**
  * @openapi
  * /chat/{id}/stream:
@@ -156,7 +193,7 @@ router.get('/:id/messages', chatController.authorizingChatAccess)
  *                   type: object
  *                   example: {}
  */
-router.get('/:id/stream', chatController.authorizingChatAccess,  sseMiddleware, chatController.stream)
+router.get('/:id/stream', chatController.authorizingAccess,  sseMiddleware, chatController.startStreamById)
 /**
  * @openapi
  * /chat/{id}/stop:
@@ -173,6 +210,6 @@ router.get('/:id/stream', chatController.authorizingChatAccess,  sseMiddleware, 
  *       '200':
  *         description: OK
  */
-router.post('/:id/stop', chatController.authorizingChatAccess, chatController.stop)
+router.post('/:id/stop', chatController.authorizingAccess, chatController.stopGenerationsById)
 
 export { router as chatRoutes }

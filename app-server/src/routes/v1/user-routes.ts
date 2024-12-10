@@ -52,7 +52,7 @@ router.get('/balance', userController.getMyBalance)
  *                   format: int64
  *                   example: 10000
  */
-router.get('/:id/balance',accessMiddleware('admin'), userController.getBalance)
+router.get('/:id/balance',accessMiddleware('admin'), userController.getBalanceById)
 /**
  * @openapi
  * /user/{id}/balance/set:
@@ -91,7 +91,7 @@ router.get('/:id/balance',accessMiddleware('admin'), userController.getBalance)
  *                   format: int64
  *                   example: 10000
  */
-router.put('/:id/balance/set',accessMiddleware('admin'), userController.setBalance)
+router.put('/:id/balance/set',accessMiddleware('admin'), userController.setBalanceById)
 /**
  * @openapi
  * /user/{id}/role/set:
@@ -128,6 +128,6 @@ router.put('/:id/balance/set',accessMiddleware('admin'), userController.setBalan
  *                 item:
  *                   $ref: '#/components/schemas/Role'
  */
-router.put('/:id/role/set',accessMiddleware('admin'), userController.setRole)
+router.put('/:id/role/set',accessMiddleware('admin'), userController.setRoleByRoleId)
 
 export { router as userRoutes }

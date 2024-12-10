@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events';
 import { NextFunction, Request, Response } from 'express';
-import OpenAI from 'openai';
 import db from '../db';
 import { UserDTO } from '../dto/user-dto';
 import { ApiError } from '../exceptions/api-error-exception';
@@ -8,7 +7,6 @@ import sendSSE from '../helpers/send-sse';
 import { Job } from '../models/job/job-model';
 import { Message } from '../models/message/message-model';
 import { Transaction } from '../models/transaction/transaction-model';
-import { User } from '../models/user/user-model';
 import { Wallet } from '../models/user/wallet-model';
 import chatService, { ChatMainData, ChatRefData } from '../services/chat-service';
 import jobService from '../services/job-service';
@@ -39,7 +37,7 @@ export const streams = new Map<number, EventEmitter<Events>>()
 
 const controller = {
   
-  create: async (req: Request, res: Response, next: NextFunction) => {
+  createChat: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const {
         model_id,
@@ -48,7 +46,7 @@ const controller = {
       //@ts-ignore
       const user = req.user as UserDTO
 
-      const chat = await db.transaction(async (t) => {
+      const chat = await db.transaction(async () => {
         return await chatService.createChat({
           user_id: user.id,
           model_id,
@@ -62,7 +60,83 @@ const controller = {
     }
   },
   
-  async stream(req: Request, res: Response, next: NextFunction) {
+  async getChatById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params
+      
+      const chat = await db.transaction(async () => {
+        return await chatService.getChatById(Number(id));
+      })
+      
+      res.status(200).send({ item: chat })
+    } catch (e) {
+      next(e);
+    }
+  },
+  
+  async updateChatById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params
+      const { name} = req.body as ChatMainData;
+      
+      const chat = await db.transaction(async () => {
+        await chatService.updateChatById(Number(id), {
+          name
+        });
+        return await chatService.getChatById(Number(id));
+      })
+      
+      res.status(200).send({ item: chat })
+    } catch (e) {
+      next(e);
+    }
+  },
+  
+  async deleteChatById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params
+      
+      await db.transaction(async () => {
+        return await chatService.deleteChatById(Number(id));
+      })
+      
+      res.sendStatus(200)
+    } catch (e) {
+      next(e);
+    }
+  },
+  
+  async listMyChats(req: Request, res: Response, next: NextFunction) {
+    try {
+      console.log('da')
+      //@ts-ignore
+      const user = req.user as UserDTO
+      
+      const chats = await db.transaction(async () => {
+        return await chatService.getAllChatsByUserId(user.id);
+      })
+      
+      res.status(200).send({ list: chats })
+    } catch (e) {
+      next(e);
+    }
+  },
+  
+  async messagesById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params
+      
+      const messages = await db.transaction(async () => {
+        return await chatService.getChatMessages(Number(id));
+      })
+      
+      res.status(200).send({ list: messages })
+    } catch (e) {
+      next(e);
+    }
+  },
+  
+  async startStreamById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params
       
@@ -160,7 +234,7 @@ const controller = {
       next(e);
     }
   },
-  async stop(req: Request, res: Response, next: NextFunction) {
+  async stopGenerationsById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params
       
@@ -176,7 +250,7 @@ const controller = {
     }
   },
   
-  async authorizingChatAccess(req: Request, res: Response, next: NextFunction) {
+  async authorizingAccess(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params
       

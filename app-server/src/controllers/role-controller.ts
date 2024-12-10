@@ -4,7 +4,7 @@ import roleService, { RoleMainData } from '../services/role-service';
 
 const controller = {
   
-  async create(req: Request, res: Response, next: NextFunction) {
+  async createRole(req: Request, res: Response, next: NextFunction) {
     try {
       const {
         name,

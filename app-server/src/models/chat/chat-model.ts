@@ -31,11 +31,18 @@ export type Chat = Omit<ChatModel, keyof Model>
 
 const chatModel = db.define<ChatModel & ChatAssociations>('chat', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, unique: true },
+  name: { type: DataTypes.STRING },
   user_id: { type: DataTypes.INTEGER },
   model_id: { type: DataTypes.INTEGER },
   created_at: { type: DataTypes.DATE },
   updated_at: { type: DataTypes.DATE },
+}, {
+  indexes: [
+    {
+      unique: true,
+      fields: ['user_id', 'name'],
+    },
+  ],
 })
 
 export {

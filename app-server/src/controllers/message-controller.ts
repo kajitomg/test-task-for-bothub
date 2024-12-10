@@ -11,7 +11,7 @@ import { streams } from './chat-controller';
 
 const controller = {
   
-  async send(req: Request, res: Response, next: NextFunction) {
+  async sendMessageInChat(req: Request, res: Response, next: NextFunction) {
     try {
       const {
         chat_id,
@@ -77,7 +77,7 @@ const controller = {
     }
   },
   
-  async authorizingChatAccess(req: Request, res: Response, next: NextFunction) {
+  async authorizingAccess(req: Request, res: Response, next: NextFunction) {
     try {
       const { chat_id } = req.body as { chat_id: number }
       
